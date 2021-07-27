@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  test_server:
+    image: 'iabramov/python-example-test:0.0.1'
+    build:
+      context: ./server
+      dockerfile: ./tests.Dockerfile
+  run_server:
+    image: 'iabramov/python-example-server:0.0.1'
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    ports:
+      - '8080:8080'
+  jenkins:
+    image: 'iabramov/jenkins-docker:0.0.1'
+    build:
+      context: .
+      dockerfile: ./JenkinsDocker.Dockerfile
+    privileged: true
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
